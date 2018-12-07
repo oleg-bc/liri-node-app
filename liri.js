@@ -1,6 +1,13 @@
 require("dotenv").config();
-var spotify = new Spotify(keys.spotify);
+//var spotify = new Spotify(keys.spotify);
 
+
+inputArg = process.argv[2];
+console.log(inputArg+"   is the input Arg");
+var movie = inputArg;
+var queryURL = "https://www.omdbapi.com/?t=" + inputArg + "&y=&plot=short&apikey=trilogy";
+
+console.log(queryURL+"   is the input queryURL");
 
 //reqs: https://ucb.bootcampcontent.com/UCB-Coding-Bootcamp/UCBSAN201810FSF5-FT/blob/master/course-content/09-nodejs/homework/Instructions/homework_instructions.md
 // function(){

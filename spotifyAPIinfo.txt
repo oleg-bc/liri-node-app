@@ -1,0 +1,3 @@
+Client ID ae27fb86748e4dd79fcdc6035284c732
+https://developer.spotify.com/dashboard/applications/ae27fb86748e4dd79fcdc6035284c732
+Client Secret 33b49ef93a7c4caf88985fa0f62ddc8c
