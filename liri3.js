@@ -1,6 +1,19 @@
+// node liri.js spotify-this-song '<song name here>'
+// This will show the following information about the song in your terminal/bash window
+
+// Artist(s)
+// The song's name
+// A preview link of the song from Spotify
+// The album that the song is from
+
+// If no song is provided then your program will default to "The Sign" by Ace of Base.
+///////////////////////////////////////////////////////////************************************ */
+// You will utilize the node-spotify-api package in order to retrieve song information from the Spotify API.
+// The Spotify API requires you sign up as a developer to generate the necessary credentials. You can follow these 
 require("dotenv").config();
 var axios = require("axios");
 
+var Spotify = require('node-spotify-api');
 // Store all of the arguments in an array
 var nodeArgs = process.argv;
 
@@ -20,39 +33,72 @@ for (var i = 2; i < nodeArgs.length; i++) {
     }
 }
 
-// Then run a request with axios to the OMDB API with the movie specified
-var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
-// This line is just to help us debug against the actual URL.
-console.log(queryUrl);
-var mTitle;
-var iRating;
-var rtRating;
-var mCountry;
-var mLang;
-var actors;
-var plot;
-axios.get(queryUrl).then(
-    function (response) {
-        console.log("Release Year: " + response.data.Year);
-        //    * Title of the movie.
-        console.log("* Title of the movie " + response.data.Title);
-        //    * Year the movie came out.
-        console.log("* Year the movie came out. " + response.data.Released);
-        //    * IMDB Rating of the movie.
-        console.log("* IMDB Rating of the movie. " + response.data.Ratings[0].Value);
-        //    * Rotten Tomatoes Rating of the movie.
-        console.log("* Rotten Tomatoes Rating of the movie. " + response.data.Ratings[1].Value);
-        //    * Country where the movie was produced.
-        console.log("* Country where the movie was produced. " + response.data.Country);
-        //    * Language of the movie.
-        console.log("* Language of the movie. " + response.data.Language);
-        //    * Plot of the movie.
-        console.log("* Plot of the movie. " + response.data.Plot);
-        //    * Actors in the movie.
-        console.log("* Actors in the movie. " + response.data.Actors);
-    }
-);
+ 
+var spotify = new Spotify({
+  id: process.env.SPOTIFY_ID,
+  secret: process.env.SPOTIFY_SECRET
+});
+ 
+spotify.search({ type: 'track', query: 'What I Got' }, function(err, data) {
+  if (err) {
+    return console.log('Error occurred: ' + err);
+  }
+ 
+console.log(data); 
+});
+
+
+// Then run a request with axios to the OMDB API with the movie specified
+
+// var spotifyURL = "https://api.spotify.com/v1/search?q=What%20I%20Got&type=track&market=US&limit=1&offset=5"
+
+// axios.get(spotifyURL, {
+//     headers: {
+//         Authorization: "Bearer " + process.env.SPOTIFY_SECRET
+//     }
+// }).then(function (response) {
+//     console.log(response.data);
+// });
+
+// this was the hardest part of this api
+// var spotifyURL = "https://api.spotify.com/v1/search?q=What%20I%20Got&type=track&market=US&limit=1&offset=5"
+// axios.get(spotifyURL,{headers: "Bearer "+ process.env.SPOTIFY_SECRET}).then( 
+//     function(response){
+//         console.log(response);
+//     });
+// "https://api.spotify.com/v1/search?q=" + movieName + "&market=US&limit=1&offset=5";
+
+// // This line is just to help us debug against the actual URL.
+// console.log(queryUrl);
+// var mTitle;
+// var iRating;
+// var rtRating;
+// var mCountry;
+// var mLang;
+// var actors;
+// var plot;
+// axios.get(queryUrl).then(
+//     function (response) {
+//         console.log("Release Year: " + response.data.Year);
+//         //    * Title of the movie.
+//         console.log("* Title of the movie " + response.data.Title);
+//         //    * Year the movie came out.
+//         console.log("* Year the movie came out. " + response.data.Released);
+//         //    * IMDB Rating of the movie.
+//         console.log("* IMDB Rating of the movie. " + response.data.Ratings[0].Value);
+//         //    * Rotten Tomatoes Rating of the movie.
+//         console.log("* Rotten Tomatoes Rating of the movie. " + response.data.Ratings[1].Value);
+//         //    * Country where the movie was produced.
+//         console.log("* Country where the movie was produced. " + response.data.Country);
+//         //    * Language of the movie.
+//         console.log("* Language of the movie. " + response.data.Language);
+//         //    * Plot of the movie.
+//         console.log("* Plot of the movie. " + response.data.Plot);
+//         //    * Actors in the movie.
+//         console.log("* Actors in the movie. " + response.data.Actors);
+//     }
+// );
 
 
 
