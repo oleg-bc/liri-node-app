@@ -1,3 +1,7 @@
+var file = require('file-system');
+var fs = require('fs');
+file.readFile === fs.readFile 
+
 require("dotenv").config();
 var axios = require("axios");
 var Spotify = require('node-spotify-api');
@@ -106,4 +110,15 @@ else if (nodeArgs[2] == "spotify-this-song") {
         console.log("The Album the song is from  " + data.tracks.items[0].album.name);
         //console.log(data); 
     });
+}
+
+
+else if (nodeArgs[2] == "do-what-it-says") {
+    
+    fs.readFile('random.txt', 'utf8', function(err, contents) {
+        console.log(contents);
+        nodeArgs[3] =  contents;
+        console.log("nodeArgs are "+nodeArgs[3]);
+           
+    }
 }
