@@ -1,26 +1,35 @@
 var file = require('file-system');
 var fs = require('fs');
-file.readFile === fs.readFile 
+file.readFile === fs.readFile
+
 
 require("dotenv").config();
 var axios = require("axios");
 var Spotify = require('node-spotify-api');
 
+
 var nodeArgs = process.argv;
 var movieName = "";
 
+
 if (nodeArgs[2] == "movie-this") {
-    for (var i = 3; i < nodeArgs.length; i++) {
-        if (i > 3 && i < nodeArgs.length) {
-            movieName = movieName + "+" + nodeArgs[i];
-        } else {
-            movieName += nodeArgs[i];
+    if (nodeArgs.length < 4) {
+        movieName = "Mr. Nobody";//////THIS IS PROBLEMATIC
+    } else {
+        for (var i = 3; i < nodeArgs.length; i++) {
+            if (i > 3 && i < nodeArgs.length) {
+                movieName = movieName + "+" + nodeArgs[i];
+            } else {
+                movieName += nodeArgs[i];
+            }
         }
     }
+    
 
     var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
-
+   
     console.log(queryUrl);
+    movieFunc = function(movieName){
     axios.get(queryUrl).then(
         function (response) {
             console.log("Release Year: " + response.data.Year);
@@ -42,7 +51,12 @@ if (nodeArgs[2] == "movie-this") {
             console.log("* Actors in the movie. " + response.data.Actors);
         }
     );
+    
 }//closes the movie-this
+movieFunc(movieName);
+}
+
+
 
 else if (nodeArgs[2] == "concert-this") {
 
@@ -114,10 +128,10 @@ else if (nodeArgs[2] == "spotify-this-song") {
 
 
 else if (nodeArgs[2] == "do-what-it-says") {
-    
-    fs.readFile('random.txt', 'utf8', function(err, contents) {
-        nodeArgs[2]=contents;
-        });
-        
-    
-    }
+
+    fs.readFile('random.txt', 'utf8', function (err, contents) {
+        // nodeArgs[2] = contents;
+    });
+
+
+}
