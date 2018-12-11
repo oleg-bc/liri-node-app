@@ -21,6 +21,6 @@ Technologies used
 To use download from: https://github.com/oleg-bc/liri-node-app
 
 
-![alt text](https://github.com/oleg-bc/liri-bot/blob/master/scrsOne.jpg?raw=true)
+![alt text](https://github.com/oleg-bc/liri-node-app/blob/master/scrsOne.jpg)
 
 This is a cmd line app so there's only 1 screenshot
