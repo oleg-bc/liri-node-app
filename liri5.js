@@ -1,28 +1,17 @@
 var file = require('file-system');
 var fs = require('fs');
-file.readFile ==
-
-
+var moment = require('moment');
 
 require("dotenv").config();
 var axios = require("axios");
 var Spotify = require('node-spotify-api');
 
 var nodeArgs = process.argv;
-var movieName = "";
+var searchTarget = "";
+var command = nodeArgs[2];
 
-if (nodeArgs[2] == "movie-this") {
-    for (var i = 3; i < nodeArgs.length; i++) {
-        if (i > 3 && i < nodeArgs.length) {
-            movieName = movieName + "+" + nodeArgs[i];
-        } else {
-            movieName += nodeArgs[i];
-        }
-    }
-
-    var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
-
-    console.log(queryUrl);
+var movieFunc = function (searchTarget) {
+    var queryUrl = "http://www.omdbapi.com/?t=" + searchTarget + "&y=&plot=short&apikey=trilogy";
     axios.get(queryUrl).then(
         function (response) {
             console.log("Release Year: " + response.data.Year);
@@ -44,63 +33,13 @@ if (nodeArgs[2] == "movie-this") {
             console.log("* Actors in the movie. " + response.data.Actors);
         }
     );
-}//closes the movie-this
-
-else if (nodeArgs[2] == "concert-this") {
-
-    var artist = "";
-    for (var i = 3; i < nodeArgs.length; i++) {
-        if (i > 3 && i < nodeArgs.length) {
-            artist = artist + "%20" + nodeArgs[i];
-        }
-        else {
-            artist += nodeArgs[i];
-        }
-    }
-
-    var queryUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
-    console.log(queryUrl);
-
-    axios.get(queryUrl).then(
-        function (response) {
-            //console.log(response.data);
-            var venueLocation = response.data[0].venue.city;
-            var dateEvent = response.data[0].datetime;
-            var venue = response.data[0].venue.name;
-            console.log("Name of the venue: " + venue);
-            //    Name of the venue
-            console.log("Venue location " + venueLocation);
-            console.log("* Date of the Event  " + dateEvent);
-            // Name of the venue
-            // Venue location
-            // Date of the Event (use moment to format this as "MM/DD/YYYY")
-        }
-    );
-
 }
 
-
-else if (nodeArgs[2] == "spotify-this-song") {
-    var track = "";
-    if (nodeArgs.length < 3) {
-        track = "The Sign";
-    }
-    else {
-        for (var i = 3; i < nodeArgs.length; i++) {
-            if (i > 3 && i < nodeArgs.length) {
-                track = track + "+" + nodeArgs[i];
-            }
-            else {
-                track += nodeArgs[i];
-            }
-        } //closes the for
-    }//closes the else
-
+var songFunc = function (track) {
     var spotify = new Spotify({
         id: process.env.SPOTIFY_ID,
         secret: process.env.SPOTIFY_SECRET
     });
-
     spotify.search({ type: 'track', query: track }, function (err, data) {
 
         if (err) {
@@ -110,17 +49,73 @@ else if (nodeArgs[2] == "spotify-this-song") {
         console.log("Song's name is " + data.tracks.items[0].name);
         console.log("Song's preview link is " + data.tracks.items[0].preview_url);
         console.log("The Album the song is from  " + data.tracks.items[0].album.name);
-        //console.log(data); 
     });
 }
 
-
-else if (nodeArgs[2] == "do-what-it-says") {
-    
-    fs.readFile('random.txt', 'utf8', function(err, contents) {
-        console.log(contents);
-        nodeArgs[3] =  contents;
-        console.log("nodeArgs are "+nodeArgs[3]);
-           
+for (var i = 3; i < nodeArgs.length; i++) {
+    if (i > 3 && i < nodeArgs.length) {
+        searchTarget = searchTarget + "+" + nodeArgs[i];
     }
+    else {
+        searchTarget += nodeArgs[i];
+    }
+} //closes the for
+
+var executeSearch = function (command, searchTarget) {
+
+    if (command == "movie-this") {
+        if (nodeArgs.length < 4) {
+            searchTarget = "Mr. Nobody";
+        }
+
+        movieFunc(searchTarget);
+    }
+
+    else if (command == "concert-this") {
+
+        var queryUrl = "https://rest.bandsintown.com/artists/" + searchTarget + "/events?app_id=codingbootcamp";
+
+        axios.get(queryUrl).then(
+            function (response) {
+                var venueLocation = response.data[0].venue.city;
+                var dateEvent = response.data[0].datetime;
+                var venue = response.data[0].venue.name;
+                console.log("Name of the venue: " + venue);
+                //    Name of the venue
+                console.log("Venue location " + venueLocation);
+                dateEvent1 = moment(dateEvent).format('MM/DD/YYYY');
+                console.log("* Date of the Event  " + dateEvent1);
+            }
+        );
+
+    }
+
+    else if (command == "spotify-this-song") {
+
+        var theArtist = "";
+        if (nodeArgs.length < 4) {
+            searchTarget = "The Sign";
+
+        }
+        songFunc(searchTarget);
+    }
+
+    else if (command == "do-what-it-says") {
+            console.log(nodeArgs.length);
+            nodeArgs[3]="";
+        fs.readFile('random.txt', 'utf8', function (err, contents) {
+
+            var arrContents = [];
+            var stringContents = "";
+            arrContents = contents;
+            stringContents = contents;
+            var splitted = stringContents.split("\"");
+            var commandPart = splitted[0];
+            var comafree = commandPart.replace(/,/g, "");
+            var songPart = splitted[1];
+            executeSearch(comafree, songPart);
+        });
+    }
+
 }
+executeSearch(command, searchTarget);
