@@ -101,7 +101,7 @@ var executeSearch = function (command, searchTarget) {
     }
 
     else if (command == "do-what-it-says") {
-            console.log(nodeArgs.length);
+            //console.log(nodeArgs.length);
             nodeArgs[3]="";
         fs.readFile('random.txt', 'utf8', function (err, contents) {
 
