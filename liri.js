@@ -94,7 +94,7 @@ var executeSearch = function (command, searchTarget) {
 
         var theArtist = "";
         if (nodeArgs.length < 4) {
-            searchTarget = "The Sign";
+            searchTarget = "The Sign Ace of Base";
 
         }
         songFunc(searchTarget);
